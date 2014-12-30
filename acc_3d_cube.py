@@ -102,13 +102,25 @@ class Simulation:
             
             for v in self.vertices
 				#get the angles from the accelerometer
-				self.acc.get_x_rotation()
-                # Rotate the point around X axis, then around Y axis, and finally around Z axis.
-                # I'm editing this to reflect the 
-                r = v.rotateX(self.angle).rotateY(self.angle).rotateZ(self.angle)
-                # Transform the point from 3D to 2D
+				x = self.acc.get_x_scaled()
+				y = self.acc.get_y_scaled()
+				z = self.acc.get_z_scaled()
+				
+				#get the roatation values
+				self.x_angle = self.acc.get_x_rotation(x,y,z)
+				self.y_angle = self.acc.get_y_rotation(x,y,z)
+				
+				#this next value will have to change when I figure out the math
+				#z_angle = 0
+                
+				# Rotate the point around X axis, then around Y axis, and finally around Z axis.
+                # I'm editing this to reflect the new angles
+                r = v.rotateX(self.x_angle).rotateY(self.y_angle).rotateZ(self.z_angle)
+                
+				# Transform the point from 3D to 2D
                 p = r.project(self.screen.get_width(), self.screen.get_height(), 256, 4)
-                # Put the point in the list of transformed vertices
+                
+				# Put the point in the list of transformed vertices
                 t.append(p)
 
             # Calculate the average Z values of each face.
@@ -174,22 +186,24 @@ class Accelerometer:
 		return -math.degrees(radians)
 
 	#for backup: def get_x_rotation(self,x,y,z):
-	def get_x_rotation(self):
-		#x value
-		self.accel_xout = self.read_word_2c(0x3b)
-		self.accel_xout_scaled = self.accel_xout / 16384.0
-		#y value
-		self.accel_yout = self.read_word_2c(0x3d)
-		self.accel_yout_scaled = self.accel_yout / 16384.0
-		#z value
-		self.accel_zout = self.read_word_2c(0x3f)
-		self.accel_zout_scaled = self.accel_zout / 16384.0
-		#math
-		self.x = self.accel_xout_scaled
-		self.y = self.accel_yout_scaled
-		self.z = self.accel_zout_scaled
+	def get_x_rotation(self,x,y,z):
 		self.radians = math.atan2(y, dist(x,z))
 		return math.degrees(self.radians)
+	
+	def get_x_scaled(self):
+		self.accel_xout = self.read_word_2c(0x3b)
+		self.accel_xout_scaled = self.accel_xout / 16384.0
+		return self.accel_xout_scaled
+		
+	def get_y_scaled(self):
+		self.accel_yout = self.read_word_2c(0x3d)
+		self.accel_yout_scaled = self.accel_yout / 16384.0
+		return self.accel_yout_scaled
+		
+	def get_z_scaled(self):
+		self.accel_zout = self.read_word_2c(0x3f)
+		self.accel_zout_scaled = self.accel_zout / 16384.0
+		return self.accel_zout_scaled
 		
 	def testclass(self):
 		return "test"
