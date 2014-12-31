@@ -114,6 +114,9 @@ class Simulation:
 				#self.z_angle = self.acc.get_z_rotation(x,y,z)
 				
 				#rotate around the x and y, leave z as 0
+				'''here, rotateX is forward and backwards
+				rotateY is around a vertical axis with positive numbers meaning CCW(left) rotation
+				rotateZ is rotating around an axis pointing straight at you with positive numbers rotating CCW (left hand)'''
 				r = v.rotateX(self.x_angle).rotateY(self.y_angle).rotateZ(self.z_angle)
 				
 				# Transform the point from 3D to 2D
@@ -186,8 +189,8 @@ class Accelerometer:
 
 	#for backup: def get_x_rotation(self,x,y,z):
 	def get_x_rotation(self,x,y,z):
-		self.radians = math.atan2(y, self.dist(x,z))
-		return math.degrees(self.radians)
+		radians = math.atan2(y, self.dist(x,z))
+		return math.degrees(radians)
 	
 	def get_x_scaled(self):
 		self.accel_xout = self.read_word_2c(0x3b)
