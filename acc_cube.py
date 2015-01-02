@@ -6,6 +6,7 @@ The cube drawing is based off of code by Leonel Machava <leonelmachava@gmail.com
 	
 The accelerometer data/interface is based off of code by Bitify and can be found at:
 	http://blog.bitify.co.uk/2013/11/reading-data-from-mpu-6050-on-raspberry.html
+	Author: Andrew Birkett
 """
 
 import sys, math, pygame, smbus
