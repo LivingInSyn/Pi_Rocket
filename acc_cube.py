@@ -108,15 +108,19 @@ class Simulation:
 				
 				#get the rotation values
 				self.x_angle = self.acc.get_x_rotation(x,y,z)
-				self.y_angle = self.acc.get_y_rotation(x,y,z)
+				self.z_angle = self.acc.get_y_rotation(x,y,z)
 				
 				#this next value will be the z when I figure it out
 				#self.z_angle = self.acc.get_z_rotation(x,y,z)
 				
-				#rotate around the x and y, leave z as 0
+				
 				'''here, rotateX is forward and backwards
 				rotateY is around a vertical axis with positive numbers meaning CCW(left) rotation
 				rotateZ is rotating around an axis pointing straight at you with positive numbers rotating CCW (left hand)'''
+				
+				'''this means that the roll is along the x axis, and the pitch is along the z axis. This is opposite from the
+				accelerometer, which is confusing as hell, but it's easier to modify here than rewrite'''
+				#change x and z angles and leave y alone because we have no yaw data
 				r = v.rotateX(self.x_angle).rotateY(self.y_angle).rotateZ(self.z_angle)
 				
 				# Transform the point from 3D to 2D
@@ -183,25 +187,31 @@ class Accelerometer:
 	def dist(self,a,b):
 		return math.sqrt((a*a)+(b*b))
 
+	#the math here is that roll = atan(y/(sqrt(x^2 + z^2)))
+	#we use atan2 because it automaticall determines the sign for us (the quadrant)
 	def get_y_rotation(self,x,y,z):
 		radians = math.atan2(x, self.dist(y,z))
 		return -math.degrees(radians)
 
-	#for backup: def get_x_rotation(self,x,y,z):
+	#the math here is that the pitch is = atan(x/(sqrt(y^2 + z^2)))
+	#we use atan2 because it automaticall determines the sign for us (the quadrant)
 	def get_x_rotation(self,x,y,z):
 		radians = math.atan2(y, self.dist(x,z))
 		return math.degrees(radians)
 	
+	#as a note here, the 'scaled' values are the values in G's
 	def get_x_scaled(self):
 		self.accel_xout = self.read_word_2c(0x3b)
 		self.accel_xout_scaled = self.accel_xout / 16384.0
 		return self.accel_xout_scaled
-		
+	
+	#as a note here, the 'scaled' values are the values in G's	
 	def get_y_scaled(self):
 		self.accel_yout = self.read_word_2c(0x3d)
 		self.accel_yout_scaled = self.accel_yout / 16384.0
 		return self.accel_yout_scaled
-		
+	
+	#as a note here, the 'scaled' values are the values in G's	
 	def get_z_scaled(self):
 		self.accel_zout = self.read_word_2c(0x3f)
 		self.accel_zout_scaled = self.accel_zout / 16384.0
