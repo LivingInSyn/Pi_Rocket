@@ -217,6 +217,21 @@ class Accelerometer:
 		self.accel_zout_scaled = self.accel_zout / 16384.0
 		return self.accel_zout_scaled
 		
+	def get_GX_scaled(self):
+		GX = self.read_word_2c(0x43)
+		GX_scaled = GX/131
+		return GX_scaled
+		
+	def get_GY_scaled(self):
+		GY = self.read_word_2c(0x45)
+		GY_scaled = GY/131
+		return GY_scaled
+		
+	def get_GZ_scaled(self):
+		GZ = self.read_word_2c(0x47)
+		GZ_scaled = GZ/131
+		return GZ_scaled
+		
 	def testclass(self):
 		return "test"
 
