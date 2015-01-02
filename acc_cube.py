@@ -10,6 +10,7 @@ The accelerometer data/interface is based off of code by Bitify and can be found
 
 import sys, math, pygame, smbus
 from operator import itemgetter
+import time
 
 class Point3D:
     def __init__(self, x = 0, y = 0, z = 0):
@@ -86,6 +87,28 @@ class Simulation:
         self.y_angle = 0
         self.z_angle = 0
         
+        #get and set initial values
+        #accelerometer
+        x = self.acc.get_x_scaled()
+		y = self.acc.get_y_scaled()
+		z = self.acc.get_z_scaled()
+		#rotation accelerometer data
+		self.last_x_angle = self.acc.get_x_rotation(x,y,z)
+		self.last_y_angle = self.acc.get_y_rotation(x,y,z)
+		#gyro
+		self.gyro_offset_x = self.acc.get_GX_scaled()
+		self.gyro_offset_y = self.acc.get_GY_scaled()
+		#gyro totals
+		self.gyro_total_x = self.last_x_angle - self.gyro_offset_x
+		self.gyro_total_y = self.last_y_angle - self.gyro_offset_y
+		
+		#time now
+		self.time_one = time.time()
+		
+		#set K values
+		self.K = 0.98
+		self.K1 = 1-K
+        
     def run(self):
         """ Main Loop """
         while 1:
@@ -100,15 +123,55 @@ class Simulation:
             # It will hold transformed vertices.
             t = []
             
+            
+            #this is where it got moved to
+            #get values from accelerometer
+            x = self.acc.get_x_scaled()
+			y = self.acc.get_y_scaled()
+			z = self.acc.get_z_scaled()
+			#scaled gyro values
+			gx = self.acc.get_GX_scaled()
+			gy = self.acc.get_GY_scaled()
+			gz = self.acc.get_GZ_scaled()
+			
+			#modify gx/y/z with the offsets
+			gx -= gyro_offset_x
+			gy -= gyro_offset_y
+			
+			#set the gyro delta values
+			time_two = time.time()
+			time_diff = time_two - self.time_one
+			self.time_one = time_two
+			
+			gx_delta = gx * time_diff
+			gy_delta = gy * time_diff
+			
+			#new gyro totals
+			self.gyro_total_x += gx_delta
+			self.gyro_total_y += gy_delta
+			
+			#get the accelerometer rotation values
+			self.x_angle = self.acc.get_x_rotation(x,y,z)
+			self.y_angle = self.acc.get_y_rotation(x,y,z)
+			
+			#combine them to filter out noise
+			self.last_x_angle = self.K * (self.last_x_angle + gx_delta ) + (self.K1 * self.x_angle)
+			self.last_y_angle = self.K * (self.last_y_angle + gy_delta ) + (self.K1 * self.y_angle)
+			
+			
+            
             for v in self.vertices:
-				#get the angles from the accelerometer
-				x = self.acc.get_x_scaled()
-				y = self.acc.get_y_scaled()
-				z = self.acc.get_z_scaled()
+				
+				#i'm going to try and move this out of the for loop
+				
+				#get values from the accelerometer
+				#x = self.acc.get_x_scaled()
+				#y = self.acc.get_y_scaled()
+				#z = self.acc.get_z_scaled()
 				
 				#get the rotation values
-				self.x_angle = self.acc.get_x_rotation(x,y,z)
-				self.z_angle = self.acc.get_y_rotation(x,y,z)
+				#self.x_angle = self.acc.get_x_rotation(x,y,z)
+				#self.z_angle = self.acc.get_y_rotation(x,y,z)
 				
 				#this next value will be the z when I figure it out
 				#self.z_angle = self.acc.get_z_rotation(x,y,z)
@@ -121,7 +184,10 @@ class Simulation:
 				'''this means that the roll is along the x axis, and the pitch is along the z axis. This is opposite from the
 				accelerometer, which is confusing as hell, but it's easier to modify here than rewrite'''
 				#change x and z angles and leave y alone because we have no yaw data
-				r = v.rotateX(self.x_angle).rotateY(self.y_angle).rotateZ(self.z_angle)
+				
+				#!!!HERE IS WHERE WE CHANGE THE Y AND THE Z!!!
+				
+				r = v.rotateX(self.last_x_angle).rotateY(self.z_angle).rotateZ(self.last_y_angle)
 				
 				# Transform the point from 3D to 2D
 				p = r.project(self.screen.get_width(), self.screen.get_height(), 256, 4)
