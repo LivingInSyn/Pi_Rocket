@@ -91,24 +91,24 @@ class Simulation:
         #get and set initial values
         #accelerometer
         x = self.acc.get_x_scaled()
-		y = self.acc.get_y_scaled()
-		z = self.acc.get_z_scaled()
-		#rotation accelerometer data
-		self.last_x_angle = self.acc.get_x_rotation(x,y,z)
-		self.last_y_angle = self.acc.get_y_rotation(x,y,z)
-		#gyro
-		self.gyro_offset_x = self.acc.get_GX_scaled()
-		self.gyro_offset_y = self.acc.get_GY_scaled()
-		#gyro totals
-		self.gyro_total_x = self.last_x_angle - self.gyro_offset_x
-		self.gyro_total_y = self.last_y_angle - self.gyro_offset_y
-		
-		#time now
-		self.time_one = time.time()
-		
-		#set K values
-		self.K = 0.98
-		self.K1 = 1-K
+	y = self.acc.get_y_scaled()
+	z = self.acc.get_z_scaled()
+	#rotation accelerometer data
+	self.last_x_angle = self.acc.get_x_rotation(x,y,z)
+	self.last_y_angle = self.acc.get_y_rotation(x,y,z)
+	#gyro
+	self.gyro_offset_x = self.acc.get_GX_scaled()
+	self.gyro_offset_y = self.acc.get_GY_scaled()
+	#gyro totals
+	self.gyro_total_x = self.last_x_angle - self.gyro_offset_x
+	self.gyro_total_y = self.last_y_angle - self.gyro_offset_y
+	
+	#time now
+	self.time_one = time.time()
+	
+	#set K values
+	self.K = 0.98
+	self.K1 = 1-self.K
         
     def run(self):
         """ Main Loop """
@@ -128,36 +128,36 @@ class Simulation:
             #this is where it got moved to
             #get values from accelerometer
             x = self.acc.get_x_scaled()
-			y = self.acc.get_y_scaled()
-			z = self.acc.get_z_scaled()
-			#scaled gyro values
-			gx = self.acc.get_GX_scaled()
-			gy = self.acc.get_GY_scaled()
-			gz = self.acc.get_GZ_scaled()
+            y = self.acc.get_y_scaled()
+            z = self.acc.get_z_scaled()
+	    #scaled gyro values
+	    gx = self.acc.get_GX_scaled()
+	    gy = self.acc.get_GY_scaled()
+	    gz = self.acc.get_GZ_scaled()
 			
-			#modify gx/y/z with the offsets
-			gx -= gyro_offset_x
-			gy -= gyro_offset_y
+	    #modify gx/y/z with the offsets
+	    gx -= self.gyro_offset_x
+	    gy -= self.gyro_offset_y
 			
-			#set the gyro delta values
-			time_two = time.time()
-			time_diff = time_two - self.time_one
-			self.time_one = time_two
+	    #set the gyro delta values
+	    time_two = time.time()
+	    time_diff = time_two - self.time_one
+	    self.time_one = time_two
 			
-			gx_delta = gx * time_diff
-			gy_delta = gy * time_diff
+	    gx_delta = gx * time_diff
+	    gy_delta = gy * time_diff
 			
-			#new gyro totals
-			self.gyro_total_x += gx_delta
-			self.gyro_total_y += gy_delta
+	    #new gyro totals
+	    self.gyro_total_x += gx_delta
+	    self.gyro_total_y += gy_delta
 			
-			#get the accelerometer rotation values
-			self.x_angle = self.acc.get_x_rotation(x,y,z)
-			self.y_angle = self.acc.get_y_rotation(x,y,z)
+	    #get the accelerometer rotation values
+	    self.x_angle = self.acc.get_x_rotation(x,y,z)
+	    self.y_angle = self.acc.get_y_rotation(x,y,z)
 			
-			#combine them to filter out noise
-			self.last_x_angle = self.K * (self.last_x_angle + gx_delta ) + (self.K1 * self.x_angle)
-			self.last_y_angle = self.K * (self.last_y_angle + gy_delta ) + (self.K1 * self.y_angle)
+	    #combine them to filter out noise
+	    self.last_x_angle = self.K * (self.last_x_angle + gx_delta ) + (self.K1 * self.x_angle)
+	    self.last_y_angle = self.K * (self.last_y_angle + gy_delta ) + (self.K1 * self.y_angle)
 			
 			
             
