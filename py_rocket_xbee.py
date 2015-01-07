@@ -43,6 +43,26 @@ class DataFeed:
 				if xbee.readline() == unicode('pong\n'):
 					self.enabled = 1
 					xbee.write(unicode('firing enabled\n'))
+					
+					#get the initial values and send them to the host
+					#the accelerometer values
+					ax = str(self.acc.get_x_value())
+					ay = str(self.acc.get_y_value())
+					az = str(self.acc.get_z_value())
+					#the gyro values
+					gx = str(self.acc.get_GX_value())
+					gy = str(self.acc.get_GY_value())
+					gz = str(self.acc.get_GZ_value())
+					#time
+					time = strftime("%H:%M:%S")
+					#temp
+					temp = str(self.acc.get_TEMP_value())
+					#format it into a string
+					data_string = unicode('AX*'+ax+'AY*'+ay+'AZ*'+az+'GX*'+gx+'GY*'+gy+'GZ*'+gz+'TE*'+temp+'T*'+time+'\n')
+					xbee.write(data_string)
+					
+					
+					#wait for fire and send I'm alive messages
 					self.wait_for_fire()
 					self.ping_alive()
 				else:
