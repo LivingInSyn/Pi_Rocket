@@ -52,11 +52,17 @@ class Accelerometer:
         self.accel_xout_scaled = self.accel_xout / 16384.0
         return self.accel_xout_scaled
     
+    def get_x_value(self):
+		return self.read_word_2c(0x3b)
+    
     #as a note here, the 'scaled' values are the values in G's  
     def get_y_scaled(self):
         self.accel_yout = self.read_word_2c(0x3d)
         self.accel_yout_scaled = self.accel_yout / 16384.0
         return self.accel_yout_scaled
+        
+    def get_y_value(self):
+		return self.read_word_2c(0x3d)
     
     #as a note here, the 'scaled' values are the values in G's  
     def get_z_scaled(self):
@@ -64,20 +70,32 @@ class Accelerometer:
         self.accel_zout_scaled = self.accel_zout / 16384.0
         return self.accel_zout_scaled
         
+    def get_z_value(self):
+		return self.read_word_2c(0x3f)
+        
     def get_GX_scaled(self):
         GX = self.read_word_2c(0x43)
         GX_scaled = GX/131
         return GX_scaled
+        
+    def get_GX_value(self):
+		return self.read_word_2c(0x43)
         
     def get_GY_scaled(self):
         GY = self.read_word_2c(0x45)
         GY_scaled = GY/131
         return GY_scaled
         
+    def get_GY_value(self):
+		return self.read_word_2c(0x45)    
+        
     def get_GZ_scaled(self):
         GZ = self.read_word_2c(0x47)
         GZ_scaled = GZ/131
         return GZ_scaled
+        
+    def get_GZ_value(self):
+		return self.read_word_2c(0x47)
         
     def testclass(self):
         return "test"
