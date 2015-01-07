@@ -79,8 +79,10 @@ class DataFeed:
 			gz = str(self.acc.get_GZ_value())
 			#time
 			time = strftime("%H:%M:%S")
+			#temp
+			temp = str(self.acc.get_TEMP_value())
 			#format it into a string
-			data_string = unicode('AX*'+ax+'AY*'+ay+'AZ*'+az+'GX*'+gx+'GY*'+gy+'GZ*'+gz+'T*'+time+'\n')
+			data_string = unicode('AX*'+ax+'AY*'+ay+'AZ*'+az+'GX*'+gx+'GY*'+gy+'GZ*'+gz+'TE*'+temp+'T*'+time+'\n')
 			xbee.write(data_string)
 		
 	def ping_alive(self):
