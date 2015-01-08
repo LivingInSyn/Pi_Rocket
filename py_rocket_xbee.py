@@ -8,7 +8,7 @@ import io
 import py_acc
 import time as Timer
 
-#this is the port that the xbee is on on the RPi
+#this is the port that the self.xbee is on on the RPi
 #this isn't  correct if it's on USB
 #port = '/dev/ttyAMA0'
 #baud = 9600
@@ -23,9 +23,9 @@ class DataFeed:
 		self.t_out = 5
 		#make an instance of our accelerometer
 		self.acc = py_acc.Accelerometer()
-		#start our serial connection to the XBee
-		xbee = serial.Serial(self.port,baudrate=self.baud,timeout=self.t_out)
-		#xbee.timeout = self.t_out
+		#start our serial connection to the self.xbee
+		self.xbee = serial.Serial(self.port,baudrate=self.baud,timeout=self.t_out)
+		#self.xbee.timeout = self.t_out
 		
 		#flow control
 		self.enabled = 0
@@ -38,11 +38,11 @@ class DataFeed:
 	def ping_till_enabled(self):
 		while self.enabled == 0:
 			Timer.sleep(.5)
-			xbee.write(unicode('ping\n'))
-			if xbee.inWaiting() > 0:
-				if xbee.readline() == unicode('pong\n'):
+			self.xbee.write(unicode('ping\n'))
+			if self.xbee.inWaiting() > 0:
+				if self.xbee.readline() == unicode('pong\n'):
 					self.enabled = 1
-					xbee.write(unicode('firing enabled\n'))
+					self.xbee.write(unicode('firing enabled\n'))
 					
 					#get the initial values and send them to the host
 					#the accelerometer values
@@ -59,7 +59,7 @@ class DataFeed:
 					temp = str(self.acc.get_TEMP_value())
 					#format it into a string
 					data_string = unicode('AX*'+ax+'AY*'+ay+'AZ*'+az+'GX*'+gx+'GY*'+gy+'GZ*'+gz+'TE*'+temp+'T*'+time+'\n')
-					xbee.write(data_string)
+					self.xbee.write(data_string)
 					
 					
 					#wait for fire and send I'm alive messages
@@ -72,10 +72,10 @@ class DataFeed:
 					
 	def wait_for_fire(self):
 		while self.fired == 0:
-			if xbee.inWaiting() > 0:
-				if xbee.readline() == unicode('FIRE\n'):
+			if self.xbee.inWaiting() > 0:
+				if self.xbee.readline() == unicode('FIRE\n'):
 					self.fired = 1
-					xbee.write(unicode('FIRING!!\n'))
+					self.xbee.write(unicode('FIRING!!\n'))
 					self.fire_rocket()
 				else:
 					pass
@@ -103,12 +103,12 @@ class DataFeed:
 			temp = str(self.acc.get_TEMP_value())
 			#format it into a string
 			data_string = unicode('AX*'+ax+'AY*'+ay+'AZ*'+az+'GX*'+gx+'GY*'+gy+'GZ*'+gz+'TE*'+temp+'T*'+time+'\n')
-			xbee.write(data_string)
+			self.xbee.write(data_string)
 		
 	def ping_alive(self):
 		while self.send_alive == 1:
 			time = strftime("%H:%M:%S")
-			xbee.write(unicode('alive '+time+'\n'))
+			self.xbee.write(unicode('alive '+time+'\n'))
 			time.sleep(1)
 					
 			
