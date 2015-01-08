@@ -2,6 +2,8 @@
 this is just the accelerometer class for the Py_Rocket Project
 By Jeremy Mill <jeremymill@gmail.com>
 '''
+import sys, math, pygame, smbus, time
+
 
 class Accelerometer:
     def __init__(self):
@@ -97,8 +99,8 @@ class Accelerometer:
     def get_GZ_value(self):
 		return self.read_word_2c(0x47)
 	
-	def get_TEMP_value(self):
-		return self.read_word_2c(0x41)
+    def get_TEMP_value(self):
+        return self.read_word_2c(0x41)
         
     def testclass(self):
         return "test"
