@@ -6,7 +6,7 @@ By Jeremy Mill <jeremymill@gmail.com>
 import serial
 import io
 import py_acc
-import time
+import time as Timer
 
 #this is the port that the xbee is on on the RPi
 #this isn't  correct if it's on USB
@@ -37,7 +37,7 @@ class DataFeed:
 		
 	def ping_till_enabled(self):
 		while self.enabled == 0:
-			time.sleep(.5)
+			Timer.sleep(.5)
 			xbee.write(unicode('ping\n'))
 			if xbee.inWaiting() > 0:
 				if xbee.readline() == unicode('pong\n'):
