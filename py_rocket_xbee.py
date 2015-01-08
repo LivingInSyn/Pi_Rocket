@@ -10,9 +10,9 @@ import time
 
 #this is the port that the xbee is on on the RPi
 #this isn't  correct if it's on USB
-port = '/dev/ttyAMA0'
-baud = 9600
-t_out = 5
+#port = '/dev/ttyAMA0'
+#baud = 9600
+#t_out = 5
 
 
 class DataFeed:
@@ -25,7 +25,7 @@ class DataFeed:
 		self.acc = py_acc.Accelerometer()
 		#start our serial connection to the XBee
 		xbee = serial.Serial(port,baudrate=baud,timeout=t_out)
-		xbee.timeout = timeout
+		xbee.timeout = self.t_out
 		
 		#flow control
 		self.enabled = 0
