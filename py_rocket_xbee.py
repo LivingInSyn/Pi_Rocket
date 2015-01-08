@@ -24,8 +24,8 @@ class DataFeed:
 		#make an instance of our accelerometer
 		self.acc = py_acc.Accelerometer()
 		#start our serial connection to the XBee
-		xbee = serial.Serial(port,baudrate=baud,timeout=t_out)
-		xbee.timeout = self.t_out
+		xbee = serial.Serial(self.port,baudrate=self.baud,timeout=self.t_out)
+		#xbee.timeout = self.t_out
 		
 		#flow control
 		self.enabled = 0
