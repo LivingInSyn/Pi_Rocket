@@ -3,7 +3,7 @@ import io
 import py_acc
 import time as Timer
 
-port = "/dev/ttyAMA0"
+port = "/dev/ttyUSB0"
 baud = 9600
 time_out = 5
 
