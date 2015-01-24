@@ -12,4 +12,5 @@ xbee = serial.Serial(port,baudrate=baud,timeout=time_out)
 while 1:
 	if xbee.inWaiting() > 0:
 		print(xbee.readline())
+        xbee.write("pong\n")
 

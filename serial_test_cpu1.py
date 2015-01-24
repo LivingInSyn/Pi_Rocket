@@ -10,5 +10,7 @@ time_out = 5
 xbee = serial.Serial(port,baudrate=baud,timeout=time_out)
 
 while 1:
+    if xbee.inWaiting() > 0:
+        print(xbee.readline())
     xbee.write("ping\n")
     Timer.sleep(1)
