@@ -3,6 +3,12 @@ This will be the python serial communications peice for the Py_Rocket Project
 By Jeremy Mill <jeremymill@gmail.com>
 '''
 
+'''
+First, it will ping until it's enabled
+Next, we tell the laptop that it's ready to fire
+Next, 
+'''
+
 import serial
 import io
 import py_acc

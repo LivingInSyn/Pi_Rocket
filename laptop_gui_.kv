@@ -1,0 +1,87 @@
+<Screen>:
+	canvas:
+		#Color:
+			#rgb: .2, .2, .2
+		Rectangle:
+			size: self.size
+			#height: '450dp'
+			#width: '600dp'
+            
+
+<Gui_Screen>
+    
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '5dp'
+        
+        Label:
+            id: title_label
+            color: 0,0,0,1
+            text: "Rocket Control Panel"
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: '5dp'
+            
+            Label:
+                id: ping_det_label
+                color: 0,0,0,1
+                text: "Ping Detected:"
+                
+            Image:
+                id: ping_det_image
+                source: "red_light.png"
+                
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: '5dp'
+            
+            Label:
+                id: firing_enabled_label
+                color: 0,0,0,1
+                text: "Firing Enabled:"
+                
+            Image:
+                id: firing_enabled_image
+                source: "red_light.png"
+                
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: '5dp'
+            
+            Label:
+                id: initial_data_label
+                color: 0,0,0,1
+                text: "Initial Rocket Data"
+                
+            Label:
+                id: initial_data_values
+                color: 0,0,0,1
+                text: "No Data received yet"
+                
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: '5dp'
+            
+            Label:
+                id: fire_rocket_label
+                color: 0,0,0,1
+                text: "Fire the Rocket?"
+                
+            Button:
+                id: fire_rocket_button
+                text: "FIRE"
+                on_release: app.click_fire()
+                
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: '5dp'
+            
+            Label:
+                id: in_flight_data_label
+                color: 0,0,0,1
+                text: "In Flight Data Status:"
+                
+            Image:
+                id: in_flight_data_image
+                source: "red_light.png"
