@@ -4,15 +4,14 @@ By Jeremy Mill <jeremymill@gmail.com>
 '''
 
 '''
-First, it will ping until it's enabled
-Next, we tell the laptop that it's ready to fire
-Next, 
+This is the rocket side
 '''
 
 import serial
 import io
 import py_acc
 import time as Timer
+import RPi.GPIO as GPIO
 
 #this is the port that the self.xbee is on on the RPi
 #this isn't  correct if it's on USB
@@ -38,6 +37,11 @@ class DataFeed:
 		self.fired = 0
 		self.send_acc = 0
 		self.send_alive = 1
+        
+        #GPIO control
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW)
+        
 		
 		
 		
@@ -90,6 +94,7 @@ class DataFeed:
 				
 	def fire_rocket(self):
 		#this will be GPIO code to trigger the transistor and fire the rocket
+        GPIO.output(7, GPIO.HIGH)
 		self.send_alive = 0
 		self.send_data()
 		

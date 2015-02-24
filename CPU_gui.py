@@ -1,3 +1,9 @@
+'''
+This is the computer side of the Pi-Rocket Project
+
+by Jeremy Mill <jeremymill@gmail.com>
+'''
+
 from kivy.config import Config
 Config.set('graphics','height',480)
 Config.set('graphics','width',800)
