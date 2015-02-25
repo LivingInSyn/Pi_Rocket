@@ -11,6 +11,7 @@ import serial
 import io
 import py_acc
 import time as Timer
+from time import strftime
 import RPi.GPIO as GPIO
 
 #this is the port that the self.xbee is on on the RPi
