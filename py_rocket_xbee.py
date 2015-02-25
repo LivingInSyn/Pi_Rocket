@@ -92,11 +92,10 @@ class DataFeed:
 			else:
 				pass
 				
-	def fire_rocket(self):
-		#this will be GPIO code to trigger the transistor and fire the rocket
+    def fire_rocket(self):
         GPIO.output(7, GPIO.HIGH)
-		self.send_alive = 0
-		self.send_data()
+        self.send_alive = 0
+        self.send_data()
 		
 	def send_data(self):
 		while 1:

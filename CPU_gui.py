@@ -19,6 +19,8 @@ from kivy.uix.label import Label
 from kivy.core.window import Window
 import subprocess
 import time
+import serial
+import threading
 
 class Gui_Screen(Screen):
     def ping_detected(self,detected):
@@ -34,8 +36,22 @@ class Laptop_Gui_App(App):
         root = ScreenManager(transition=self.transition)
         self.gui_screen = Gui_Screen(name='gui_screen')
         root.add_widget(self.gui_screen)
+        
         #I will uncomment the next line if I need the window close method
         #root.add_widget(self.logout_times)
+        
+        #the variables for the xbee are here
+        self.port = "/dev/ttyUSB0"
+        self.baud = 9600
+        self.time_out = 5
+        self.xbee = serial.Serial(self.port,baudrate=self.baud,timeout=self.time_out)
+        
+        #flow controls
+        self.waiting_pings = 0
+        
+        self.waiting_fire = threading.Thread(target=self.watch_pings,args=())
+        self.waiting_fire.start()
+        
         return root
         
     def click_fire(self):
@@ -43,9 +59,18 @@ class Laptop_Gui_App(App):
         #stub right now will call to fire rocket
         
     def watch_pings(self):
-        pass
+        #pass
         #stub
         #will watch the pings from the pi and change a light color
+        while self.waiting_pings == 0:
+            if self.xbee.inWaiting() > 0:
+                if self.xbee.readline() == "ping\n":
+                    self.xbee.write("pong\n")
+                    self.waiting_pings = 1
+        while 1:
+            if self.xbee.inWaiting() > 0:
+                print(self.xbee.readline())
+        
         
     def write_data(self):
         pass
