@@ -43,6 +43,9 @@ class DataFeed:
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW)
         
+        #create a file object
+        self.f_obj = open('flight_data','w')
+        
         
         
         
@@ -70,7 +73,11 @@ class DataFeed:
                     temp = str(self.acc.get_TEMP_value())
                     #format it into a string
                     data_string = unicode('AX*'+ax+'AY*'+ay+'AZ*'+az+'GX*'+gx+'GY*'+gy+'GZ*'+gz+'TE*'+temp+'T*'+time+'\n')
+                    #write to the xbee
                     self.xbee.write(data_string)
+                    #write to a file
+                    self.f_obj.write(data_string)
+                    
                     
                     
                     #wait for fire and send I'm alive messages
@@ -115,6 +122,8 @@ class DataFeed:
             #format it into a string
             data_string = unicode('AX*'+ax+'AY*'+ay+'AZ*'+az+'GX*'+gx+'GY*'+gy+'GZ*'+gz+'TE*'+temp+'T*'+time+'\n')
             self.xbee.write(data_string)
+            #write to the file
+            self.f_obj.write(data_string)
         
     def ping_alive(self):
         while self.send_alive == 1:
