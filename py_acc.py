@@ -27,7 +27,11 @@ class Accelerometer:
         return val
 
     def read_word_2c(self,adr):
-        val = self.read_word(adr)
+        try:
+            val = self.read_word(adr)
+        #NEED TO UPDATE THE EXCEPT
+        except:
+            val = 0x0000
         if (val >= 0x8000):
             return -((65535 - val) + 1)
         else:

@@ -48,6 +48,7 @@ class Laptop_Gui_App(App):
         
         #flow controls
         self.waiting_pings = 0
+        self.firing_enabled = 0
         
         self.waiting_fire = threading.Thread(target=self.watch_pings,args=())
         self.waiting_fire.start()
@@ -66,10 +67,13 @@ class Laptop_Gui_App(App):
             if self.xbee.inWaiting() > 0:
                 if self.xbee.readline() == "ping\n":
                     self.xbee.write("pong\n")
+                    self.gui_screen.ping_detected(True)
                     self.waiting_pings = 1
-        while 1:
+        while self.firing_enabled == 0:
             if self.xbee.inWaiting() > 0:
-                print(self.xbee.readline())
+                if self.xbee.readline() == "firing enabled\n":
+                    #change the image
+                    pass
         
         
     def write_data(self):
