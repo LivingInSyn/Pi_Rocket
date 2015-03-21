@@ -28,6 +28,11 @@ class Gui_Screen(Screen):
             self.ids.ping_det_image.source = "green_light.png"
             self.ids.ping_det_image.reload()
             print(self.ids.ping_det_image.source)
+            
+    def firing_enabled(self,enabled):
+        if enabled == True:
+            self.ids.firing_enabled_label.source = "green_light.png"
+            self.ids.ping_det_image.reload()
         
 
 class Laptop_Gui_App(App):
@@ -46,7 +51,7 @@ class Laptop_Gui_App(App):
         self.port = "/dev/ttyUSB0"
         self.baud = 9600
         self.time_out = 5
-        self.xbee = serial.Serial(self.port,baudrate=self.baud,timeout=self.time_out)
+        #self.xbee = serial.Serial(self.port,baudrate=self.baud,timeout=self.time_out)
         
         #flow controls
         self.waiting_pings = 0
@@ -60,6 +65,8 @@ class Laptop_Gui_App(App):
     def click_fire(self):
         #stub right now will call to fire rocket
         self.xbee.write("FIRE\n")
+        self.write_data()
+        #self.gui_screen.ping_detected(True)
         
     def watch_pings(self):
         #pass
@@ -70,12 +77,15 @@ class Laptop_Gui_App(App):
                 if self.xbee.readline() == "ping\n":
                     self.xbee.write("pong\n")
                     self.gui_screen.ping_detected(True)
+                    self.gui_screen.canvas.ask_update()
                     self.waiting_pings = 1
         while self.firing_enabled == 0:
             if self.xbee.inWaiting() > 0:
                 if self.xbee.readline() == "firing enabled\n":
                     #change the image
-                    pass
+                    self.firing_enabled = 1
+                    self.gui_screen.firing_enabled(True)
+                    self.gui_screen.canvas.ask_update()
         
         
     def write_data(self):

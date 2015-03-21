@@ -1,5 +1,6 @@
 <Screen>:
 	canvas:
+    #id: the_canvas
 		#Color:
 			#rgb: .2, .2, .2
 		Rectangle:
@@ -22,6 +23,7 @@
         BoxLayout:
             orientation: 'horizontal'
             padding: '5dp'
+            #id: gui_screen_sub_layout
             
             Label:
                 id: ping_det_label
@@ -30,7 +32,7 @@
                 
             Image:
                 id: ping_det_image
-                source: "green_light.png"
+                source: "red_light.png"
                 
         BoxLayout:
             orientation: 'horizontal'
