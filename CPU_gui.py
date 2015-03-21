@@ -26,6 +26,8 @@ class Gui_Screen(Screen):
     def ping_detected(self,detected):
         if detected == True:
             self.ids.ping_det_image.source = "green_light.png"
+            self.ids.ping_det_image.reload()
+            print(self.ids.ping_det_image.source)
         
 
 class Laptop_Gui_App(App):
@@ -56,8 +58,8 @@ class Laptop_Gui_App(App):
         return root
         
     def click_fire(self):
-        pass
         #stub right now will call to fire rocket
+        self.xbee.write("FIRE\n")
         
     def watch_pings(self):
         #pass
@@ -77,9 +79,10 @@ class Laptop_Gui_App(App):
         
         
     def write_data(self):
-        pass
-        #stub
-        #will gather up the data sent and write it to a file
+        while 1:
+            if self.xbee.inWaiting() > 0:
+                newline = self.xbee.readline()
+                print(newline)
 
 if __name__ == '__main__':
     Laptop_Gui_App().run()
