@@ -40,8 +40,8 @@ class DataFeed:
         self.send_alive = 1
         
         #GPIO control
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(18, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
         
         #create a file object
         self.f_obj = open('flight_data','w')
@@ -101,7 +101,7 @@ class DataFeed:
                 pass
                 
     def fire_rocket(self):
-        GPIO.output(18, GPIO.HIGH)
+        GPIO.output(12, True)
         self.send_alive = 0
         self.send_data()
         
