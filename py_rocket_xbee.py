@@ -40,7 +40,7 @@ class DataFeed:
         self.send_alive = 1
         
         #GPIO control
-        GPIO.setmode(GPIO.BOARD)
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(18, GPIO.OUT, initial=GPIO.LOW)
         
         #create a file object

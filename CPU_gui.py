@@ -51,7 +51,7 @@ class Laptop_Gui_App(App):
         self.port = "/dev/ttyUSB0"
         self.baud = 9600
         self.time_out = 5
-        #self.xbee = serial.Serial(self.port,baudrate=self.baud,timeout=self.time_out)
+        self.xbee = serial.Serial(self.port,baudrate=self.baud,timeout=self.time_out)
         
         #flow controls
         self.waiting_pings = 0
